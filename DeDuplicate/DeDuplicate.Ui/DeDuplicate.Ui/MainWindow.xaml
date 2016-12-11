@@ -51,7 +51,7 @@
 
                     <CheckBox IsChecked="{Binding WillAutomaticallyDelete}" Content="Automatically remove files options" />
                     <StackPanel Visibility="{Binding WillAutomaticallyDelete, Converter={StaticResource ShowIfTrue}}">
-                        <CheckBox IsChecked="{Binding WillKeepNewFile}" Content="Keep newer file" />
+                        <!--<CheckBox IsChecked="{Binding WillKeepNewFile}" Content="Keep newer file" />-->
                     </StackPanel>
                 </StackPanel>
             </Grid>
