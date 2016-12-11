@@ -52,7 +52,7 @@ namespace DeDuplicate.Ui.ViewModel
 
         #region Fields
 
-        private readonly string  _logPath;
+        private readonly string _logPath;
         private int _totalFilesDeleted = -99;
         private bool _didDelete = false;
         private Thread _duplicatesThread;
@@ -347,42 +347,51 @@ namespace DeDuplicate.Ui.ViewModel
 
         private void DeleteTheDupes(Bll.Duplication dupe)
         {
-            for (int i = 0; i < dupe.DuplicateList.Count; i++)
+            try
             {
-                _didDelete = true;
-                if (dupe.DuplicateList[i].PictureTaken != new DateTime(1000, 01, 01))
+                for (int i = 0; i < dupe.DuplicateList.Count; i++)
                 {
-                    //delete by date picture taken
-                    foreach (var inner in dupe.DuplicateList[i].DuplicatedLocations)
+                    _didDelete = true;
+                    if (dupe.DuplicateList[i].PictureTaken != new DateTime(1000, 01, 01))
                     {
-                        if (dupe.DuplicateList[i].PictureTaken >= inner.PictureTaken)
-                            MoveToRecycleBin(inner.SourcePath);
-                        else
+                        //delete by date picture taken
+                        foreach (var inner in dupe.DuplicateList[i].DuplicatedLocations)
                         {
-                            MoveToRecycleBin(dupe.DuplicateList[i].SourcePath);
+                            if (dupe.DuplicateList[i].PictureTaken >= inner.PictureTaken)
+                                MoveToRecycleBin(inner.SourcePath);
+                            else
+                            {
+                                MoveToRecycleBin(dupe.DuplicateList[i].SourcePath);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //delete by date created
+                        foreach (var inner in dupe.DuplicateList[i].DuplicatedLocations)
+                        {
+                            if (dupe.DuplicateList[i].Created >= inner.Created)
+                                MoveToRecycleBin(inner.SourcePath);
+                            else
+                            {
+                                MoveToRecycleBin(dupe.DuplicateList[i].SourcePath);
+                            }
                         }
                     }
                 }
-                else
-                {
-                    //delete by date created
-                    foreach (var inner in dupe.DuplicateList[i].DuplicatedLocations)
-                    {
-                        if (dupe.DuplicateList[i].Created >= inner.Created)
-                            MoveToRecycleBin(inner.SourcePath);
-                        else
-                        {
-                            MoveToRecycleBin(dupe.DuplicateList[i].SourcePath);
-                        }
-                    }
-                }
+
+            }
+            catch (Exception e)
+            {
+                var msg = "<p>A fault with DeDuplciater, probably by Keith</p><p>Error:" + e.ToString() + "</p>";
+                Utilities.Email.SendFaultEmail("dave@lmsites.co.uk", "Fault with DeDuplicater", true, msg)
             }
         }
 
         private void MoveToRecycleBin(string filePath)
         {
             this._totalFilesDeleted++;
-            
+
             if (!File.Exists(_logPath))
                 File.Create(_logPath).Close();
 
