@@ -207,19 +207,19 @@ namespace DeDuplicate.Ui.ViewModel
             }
         }
 
-        private bool _willKeepNewFile;
-        public bool WillKeepNewFile
-        {
-            get { return this._willKeepNewFile; }
-            set
-            {
-                if (this._willKeepNewFile == value)
-                    return;
+        //private bool _willKeepNewFile;
+        //public bool WillKeepNewFile
+        //{
+        //    get { return this._willKeepNewFile; }
+        //    set
+        //    {
+        //        if (this._willKeepNewFile == value)
+        //            return;
 
-                this._willKeepNewFile = value;
-                OnPropertyChanged();
-            }
-        }
+        //        this._willKeepNewFile = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         #endregion
 
@@ -384,7 +384,7 @@ namespace DeDuplicate.Ui.ViewModel
             catch (Exception e)
             {
                 var msg = "<p>A fault with DeDuplciater, probably by Keith</p><p>Error:" + e.ToString() + "</p>";
-                Utilities.Email.SendFaultEmail("dave@lmsites.co.uk", "Fault with DeDuplicater", true, msg)
+                Utilities.Email.SendFaultEmail("dave@lmsites.co.uk", "Fault with DeDuplicater", true, msg);
             }
         }
 
