@@ -10,6 +10,7 @@ using DeDuplicate.Bll.Model;
 using System.IO;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using DeDuplicate.Logging;
 
 namespace DeDuplicate.Bll
 {
@@ -34,6 +35,7 @@ namespace DeDuplicate.Bll
             this.DuplicateList = new List<Duplicate>();
             this.SourcePath = source;
             this.DestinationPath = destination;
+            this._logger = new Logger();
 
             if (this.SourcePath.Contains(".") || this.DestinationPath.Contains("."))
                 throw new Exception("Oops, looks like you're passing a file instead of path!");
@@ -44,7 +46,7 @@ namespace DeDuplicate.Bll
         #region Fields
 
         private double _overallPercentage;
-
+        private Logger _logger;
         #endregion /Fields
 
         #region Properties
@@ -126,9 +128,13 @@ namespace DeDuplicate.Bll
                     UpdateGui(paths.Count, numberOfSourcePaths, sw.ElapsedTicks, i, ref allTicks, ref previousTime, currentFileIteration);
                     continue;
                 }
+                try
+                {
 
                 if (DoFilesMatch(sourceFileInfo, destinationFileInfo))
                 {
+                    this._logger.Write(sourceFileInfo.FullName, destinationFileInfo.FullName, null);
+
                     if (duplicate == null)
                     {
                         duplicate = new Duplicate();
@@ -149,7 +155,12 @@ namespace DeDuplicate.Bll
                     duplicate.DuplicatedLocations.Add(dupeDest);
                 }
 
-                    UpdateGui(paths.Count, numberOfSourcePaths, sw.ElapsedTicks, i, ref allTicks, ref previousTime, currentFileIteration);
+                }
+                catch (Exception e)
+                {
+                    this._logger.Write(sourceFileInfo.FullName, destinationFileInfo.FullName, e.ToString());
+                }
+                UpdateGui(paths.Count, numberOfSourcePaths, sw.ElapsedTicks, i, ref allTicks, ref previousTime, currentFileIteration);
 
                 allTicks += sw.ElapsedTicks;
                 sw.Stop();
