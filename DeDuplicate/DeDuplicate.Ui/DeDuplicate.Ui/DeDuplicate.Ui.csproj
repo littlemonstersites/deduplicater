@@ -31,7 +31,7 @@
     <SuiteName>DeDuplicater</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -167,6 +167,10 @@
     <ProjectReference Include="..\DeDuplicate.Bll\DeDuplicate.Bll.csproj">
       <Project>{08fcd1f8-0903-4bf4-b3bb-96f867dd04b4}</Project>
       <Name>DeDuplicate.Bll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeDuplicate.Logging\DeDuplicate.Logging.csproj">
+      <Project>{10a15406-ca8b-4f0c-bcaa-11f49ff00aaa}</Project>
+      <Name>DeDuplicate.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
